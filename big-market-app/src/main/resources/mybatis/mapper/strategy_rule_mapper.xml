@@ -16,7 +16,7 @@
 
     <select id="queryStrategyRuleList" resultMap="dataMap">
         select strategy_id
-        from strategy_rule
+        from `strategy_rule`
         limit 10
     </select>
 
@@ -25,6 +25,15 @@
         from strategy_rule
         where strategy_id = #{strategyId}
           and rule_model = #{ruleModel}
+    </select>
+
+    <select id="queryStrategyRuleValue" resultType="java.lang.String">
+        select rule_value from strategy_rule
+        where strategy_id = #{strategyId}
+        and rule_model = #{ruleModel}
+        <if test="awardId != null">
+            and award_id = #{awardId}
+        </if>
     </select>
 
 
