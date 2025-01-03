@@ -1,4 +1,4 @@
-package com.lb.domain.strategy.model.alobj;
+package com.lb.domain.strategy.model.valobj;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

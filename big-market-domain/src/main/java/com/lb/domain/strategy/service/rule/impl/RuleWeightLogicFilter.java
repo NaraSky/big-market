@@ -2,7 +2,7 @@ package com.lb.domain.strategy.service.rule.impl;
 
 import com.lb.domain.strategy.model.entity.RuleActionEntity;
 import com.lb.domain.strategy.model.entity.RuleMatterEntity;
-import com.lb.domain.strategy.model.alobj.RuleLogicCheckTypeVO;
+import com.lb.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
 import com.lb.domain.strategy.repository.IStrategyRepository;
 import com.lb.domain.strategy.service.annotation.LogicStrategy;
 import com.lb.domain.strategy.service.rule.ILogicFilter;

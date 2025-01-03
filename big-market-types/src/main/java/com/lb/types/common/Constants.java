@@ -8,6 +8,7 @@ public class Constants {
     public final static String COLON = ":";
     // 空格
     public final static String SPACE = " ";
+    public final static String UNDERLINE = "_";
 
     public static class RedisKey {
         // 策略键前缀

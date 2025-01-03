@@ -2,7 +2,7 @@ package com.lb.domain.strategy.service.rule.impl;
 
 import com.lb.domain.strategy.model.entity.RuleActionEntity;
 import com.lb.domain.strategy.model.entity.RuleMatterEntity;
-import com.lb.domain.strategy.model.alobj.RuleLogicCheckTypeVO;
+import com.lb.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
 import com.lb.domain.strategy.repository.IStrategyRepository;
 import com.lb.domain.strategy.service.annotation.LogicStrategy;
 import com.lb.domain.strategy.service.rule.ILogicFilter;
@@ -24,6 +24,12 @@ public class RuleBlackListLogicFilter implements ILogicFilter<RuleActionEntity.R
     @Resource
     private IStrategyRepository strategyRepository;
 
+    /**
+     * 根据给定的规则事项实体过滤规则行为实体
+     *
+     * @param ruleMatterEntity 规则事项实体
+     * @return 规则行为实体
+     */
     @Override
     public RuleActionEntity<RuleActionEntity.RaffleBeforeEntity> filter(RuleMatterEntity ruleMatterEntity) {
         log.info("规则过滤-黑名单 userId:{} strategyId:{} ruleModel:{}",

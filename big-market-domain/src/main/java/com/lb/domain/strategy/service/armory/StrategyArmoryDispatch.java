@@ -4,6 +4,7 @@ import com.lb.domain.strategy.model.entity.StrategyAwardEntity;
 import com.lb.domain.strategy.model.entity.StrategyEntity;
 import com.lb.domain.strategy.model.entity.StrategyRuleEntity;
 import com.lb.domain.strategy.repository.IStrategyRepository;
+import com.lb.types.common.Constants;
 import com.lb.types.enums.ResponseCode;
 import com.lb.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +56,7 @@ public class StrategyArmoryDispatch implements IStrategyArmory, IStrategyDispatc
             // 移除不在权重规则值列表中的奖品实体
             strategyAwardEntitiesClone.removeIf(entity -> !ruleWeightValues.contains(entity.getAwardId()));
             // 调用私有方法组装策略，并传入策略ID和权重规则键拼接后的字符串作为key
-            assembleLotteryStrategy(String.valueOf(strategyId).concat("_").concat(key), strategyAwardEntitiesClone);
+            assembleLotteryStrategy(String.valueOf(strategyId).concat(Constants.UNDERLINE).concat(key), strategyAwardEntitiesClone);
         }
 
         return true;
@@ -118,7 +119,7 @@ public class StrategyArmoryDispatch implements IStrategyArmory, IStrategyDispatc
 
     @Override
     public Integer getRandomAwardId(Long strategyId, String ruleWeightValue) {
-        String key = String.valueOf(strategyId).concat("_").concat(ruleWeightValue);
+        String key = String.valueOf(strategyId).concat(Constants.UNDERLINE).concat(ruleWeightValue);
         int rateRange = strategyRepository.getRateRange(key);
         // 通过生成的随机值，获取概率值奖品查找表的结果
         return strategyRepository.getStrategyAwardAssemble(key, new SecureRandom().nextInt(rateRange));
