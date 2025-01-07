@@ -5,9 +5,11 @@ import com.lb.domain.strategy.model.entity.RuleActionEntity;
 import com.lb.domain.strategy.model.entity.RuleMatterEntity;
 import com.lb.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
 import com.lb.domain.strategy.repository.IStrategyRepository;
+import com.lb.domain.strategy.service.AbstractRaffleStrategy;
 import com.lb.domain.strategy.service.armory.IStrategyDispatch;
 import com.lb.domain.strategy.service.rule.ILogicFilter;
-import com.lb.domain.strategy.service.rule.factory.DefaultLogicFactory;
+import com.lb.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
+import com.lb.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -31,18 +33,18 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
     /**
      * 构造函数，初始化策略仓储服务和策略调度服务
      *
-     * @param repository 策略仓储服务
+     * @param repository       策略仓储服务
      * @param strategyDispatch 策略调度服务
      */
-    public DefaultRaffleStrategy(IStrategyRepository repository, IStrategyDispatch strategyDispatch) {
-        super(repository, strategyDispatch);
+    public DefaultRaffleStrategy(IStrategyRepository repository, IStrategyDispatch strategyDispatch, DefaultChainFactory defaultChainFactory) {
+        super(repository, strategyDispatch, defaultChainFactory);
     }
 
     /**
      * 抽奖前的规则过滤逻辑
      *
      * @param raffleFactorEntity 抽奖因子实体对象
-     * @param logics 规则模型数组
+     * @param logics             规则模型数组
      * @return 规则过滤结果
      */
     @Override
@@ -109,7 +111,7 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
      * 抽奖中的规则过滤逻辑
      *
      * @param raffleFactorEntity 抽奖因子实体对象
-     * @param logics 规则模型数组
+     * @param logics             规则模型数组
      * @return 规则过滤结果
      */
     @Override

@@ -1,6 +1,6 @@
 package com.lb.domain.strategy.model.valobj;
 
-import com.lb.domain.strategy.service.rule.factory.DefaultLogicFactory;
+import com.lb.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
 import com.lb.types.common.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,9 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @description 抽奖策略规则规则值对象；值对象，没有唯一ID，仅限于从数据库查询对象
