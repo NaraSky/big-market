@@ -1,5 +1,1 @@
-# xfg-frame-archetype - DDD 脚手架
-
-
-md5 scaffold-lite-1.0.pom > scaffold-lite-1.0.pom.md5
-sha1sum scaffold-lite-1.0.pom > scaffold-lite-1.0.pom.sha1
+飞书文档链接: https://aeeorsku6f.feishu.cn/docx/BQXSdyGj0oH1aqx21pJcLFa1nad?from=from_copylink
