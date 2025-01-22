@@ -4,6 +4,7 @@ import com.lb.domain.strategy.service.armory.IStrategyArmory;
 import com.lb.domain.strategy.service.armory.IStrategyDispatch;
 import com.lb.infrastructure.persistent.redis.IRedisService;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.redisson.api.RMap;
@@ -27,7 +28,7 @@ public class StrategyTest {
     /**
      * 策略ID；100001L、100002L 装配的时候创建策略表写入到 Redis Map 中
      */
-    @Test
+    @Before
     public void test_strategyArmory() {
         boolean success = strategyArmory.assembleLotteryStrategy(100001L);
         log.info("测试结果：{}", success);

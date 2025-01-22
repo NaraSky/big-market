@@ -16,8 +16,7 @@
 
     <select id="queryStrategyRuleList" resultMap="dataMap">
         select strategy_id
-        from strategy_rule
-                 limit 10
+        from strategy_rule limit 10
     </select>
 
     <select id="queryStrategyRule" parameterType="com.lb.infrastructure.persistent.po.StrategyRule" resultMap="dataMap">
@@ -25,6 +24,15 @@
         from strategy_rule
         where strategy_id = #{strategyId}
           and rule_model = #{ruleModel}
+    </select>
+
+    <select id="queryStrategyRuleValue" parameterType="com.lb.infrastructure.persistent.po.StrategyRule"
+            resultType="java.lang.String">
+        select rule_value from strategy_rule
+        where strategy_id = #{strategyId} and rule_model = #{ruleModel}
+        <if test="awardId != null">
+            and award_id = #{awardId}
+        </if>
     </select>
 
 
