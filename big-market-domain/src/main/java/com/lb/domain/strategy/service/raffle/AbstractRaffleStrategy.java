@@ -5,17 +5,20 @@ import com.lb.domain.strategy.model.entity.RaffleFactorEntity;
 import com.lb.domain.strategy.model.entity.RuleActionEntity;
 import com.lb.domain.strategy.model.entity.StrategyEntity;
 import com.lb.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
+import com.lb.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
 import com.lb.domain.strategy.repository.IStrategyRepository;
 import com.lb.domain.strategy.service.IRaffleStrategy;
 import com.lb.domain.strategy.service.armory.IStrategyDispatch;
 import com.lb.domain.strategy.service.rule.factory.DefaultLogicFactory;
 import com.lb.types.enums.ResponseCode;
 import com.lb.types.exception.AppException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * 抽奖策略抽象类，定义了抽奖的基本流程，并由具体的子类来实现具体规则的处理。
  */
+@Slf4j
 public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
 
     // 策略仓储服务 -> 提供策略相关的资源（如规则、奖品等）
@@ -26,8 +29,9 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
 
     /**
      * 构造函数，初始化策略仓储和策略调度服务
+     *
      * @param strategyRepository 策略仓储
-     * @param strategyDispatch 策略调度
+     * @param strategyDispatch   策略调度
      */
     public AbstractRaffleStrategy(IStrategyRepository strategyRepository, IStrategyDispatch strategyDispatch) {
         this.strategyRepository = strategyRepository;
@@ -36,6 +40,7 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
 
     /**
      * 执行抽奖的流程，包括参数校验、规则过滤、抽奖过程等
+     *
      * @param raffleFactorEntity 包含抽奖所需的各种因素，如用户ID、策略ID等
      * @return RaffleAwardEntity 返回最终抽奖结果
      */
@@ -76,15 +81,35 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
         // 4. 默认抽奖流程，如果没有符合的规则，随机返回奖品ID
         Integer awardId = strategyDispatch.getRandomAwardId(strategyId);
 
+        // 5. 查询奖品规则「抽奖中（拿到奖品ID时，过滤规则）、抽奖后（扣减完奖品库存后过滤，抽奖中拦截和无库存则走兜底）」
+        StrategyAwardRuleModelVO strategyAwardRuleModelVO = strategyRepository.queryStrategyAwardRuleModelVO(strategyId, awardId);
+
+        // 6. 抽奖中 - 规则过滤
+        RuleActionEntity<RuleActionEntity.RaffleCenterEntity> ruleActionCenterEntity = this.doCheckRaffleCenterLogic(RaffleFactorEntity.builder()
+                        .userId(userId)
+                        .strategyId(strategyId)
+                        .awardId(awardId)
+                .build(), strategyAwardRuleModelVO.raffleCenterRuleModelList());
+
+        if (RuleLogicCheckTypeVO.TAKE_OVER.getCode().equals(ruleActionCenterEntity.getCode())){
+            log.info("【临时日志】中奖中规则拦截，通过抽奖后规则 rule_luck_award 走兜底奖励。");
+            return RaffleAwardEntity.builder()
+                    .awardDesc("中奖中规则拦截，通过抽奖后规则 rule_luck_award 走兜底奖励。")
+                    .build();
+        }
+
         return RaffleAwardEntity.builder()
                 .awardId(awardId)  // 返回随机抽中的奖品ID
                 .build();
     }
 
+    protected abstract RuleActionEntity<RuleActionEntity.RaffleCenterEntity> doCheckRaffleCenterLogic(RaffleFactorEntity raffleFactorEntity, String... logics);
+
     /**
      * 抽象方法，定义了抽奖前的规则过滤逻辑，由具体的子类实现
+     *
      * @param raffleFactorEntity 抽奖因素实体
-     * @param logics 规则模型数组
+     * @param logics             规则模型数组
      * @return 返回经过规则过滤后的抽奖动作实体
      */
     protected abstract RuleActionEntity<RuleActionEntity.RaffleBeforeEntity> doCheckRaffleBeforeLogic(RaffleFactorEntity raffleFactorEntity, String... logics);
