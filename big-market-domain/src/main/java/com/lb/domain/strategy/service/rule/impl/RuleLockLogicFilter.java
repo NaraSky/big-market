@@ -32,7 +32,7 @@ public class RuleLockLogicFilter implements ILogicFilter<RuleActionEntity.Raffle
         String ruleValue = strategyRepository.queryStrategyRuleValue(ruleMatterEntity.getStrategyId(), ruleMatterEntity.getAwardId(), ruleMatterEntity.getRuleModel());
         long raffleCount = Long.parseLong(ruleValue);
 
-        if (raffleCount >= userRaffleCount) {
+        if (raffleCount <= userRaffleCount) {
             return RuleActionEntity.<RuleActionEntity.RaffleCenterEntity>builder()
                     .code(RuleLogicCheckTypeVO.ALLOW.getCode())
                     .info(RuleLogicCheckTypeVO.ALLOW.getInfo())
